@@ -16,7 +16,7 @@ namespace XU9YYJ_HFT_2021221.Models.Models
         }
         public ApiResult(bool success, List<string> messages = null)
         {
-            this.IsSuccess = success;
+            IsSuccess = success;
             Messages = messages;
         }
     }

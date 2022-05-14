@@ -7,11 +7,13 @@ namespace XU9YYJ_HFT_2021221.WpfClient
     {
         public OrderModel EditOrder(OrderModel order)
         {
-            var window = new OrderEditorWindow(order);
-            if (window.ShowDialog() == true)
-            {
-                return window.Order;
-            }
+
+                var window = new OrderEditorWindow(order);
+                if (window.ShowDialog() == true)
+                {
+                    return window.Order;
+                }
+           
             return null;
         }
     }

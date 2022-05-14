@@ -32,6 +32,7 @@ namespace XU9YYJ_HFT_2021221.WpfClient.BL.Implementation
             OrderModel orderToEdit = null;
             bool operationFinished = false;
 
+
             do
             {
                 var newOrder = editorService.EditOrder(orderToEdit);
@@ -67,7 +68,7 @@ namespace XU9YYJ_HFT_2021221.WpfClient.BL.Implementation
                 }
                 else
                 {
-                    SendMessage("Order adding has been cancelled.");
+                    SendMessage("Order add has cancelled");
                     operationFinished = true;
                 }
             } while (!operationFinished);
@@ -158,46 +159,53 @@ namespace XU9YYJ_HFT_2021221.WpfClient.BL.Implementation
         {
             OrderModel orderToEdit = order;
             bool operationFinished = false;
-
-            do
+            if (order == null)
             {
-                var editedOrder = editorService.EditOrder(orderToEdit);
-
-                if (editedOrder != null)
+                SendMessage("Please select an order to edit");
+            }
+            else
+            {
+                do
                 {
-                    var operationResult = httpService.Update(new OrderDTO()
+                    var editedOrder = editorService.EditOrder(orderToEdit);
+
+                    if (editedOrder != null)
                     {
-                        Id = order.Id,
-                        ItemId = editedOrder.ItemId,
-                        Quantity = editedOrder.Quantity,
-                        UnitPrice = editedOrder.UnitPrice,
-                        Currency = editedOrder.Currency,
-                        Note = editedOrder.Note,
-                        Date = editedOrder.Date,
-                        SupplierName = editedOrder.SupplierName,
-                        SupplierId = editedOrder.SupplierId,
+                        var operationResult = httpService.Update(new OrderDTO()
+                        {
+                            Id = order.Id,
+                            ItemId = editedOrder.ItemId,
+                            Quantity = editedOrder.Quantity,
+                            UnitPrice = editedOrder.UnitPrice,
+                            Currency = editedOrder.Currency,
+                            Note = editedOrder.Note,
+                            Date = editedOrder.Date,
+                            SupplierName = editedOrder.SupplierName,
+                            SupplierId = editedOrder.SupplierId,
 
-                    });
+                        });
 
-                    orderToEdit = editedOrder;
-                    operationFinished = operationResult.IsSuccess;
+                        orderToEdit = editedOrder;
+                        operationFinished = operationResult.IsSuccess;
 
-                    if (operationResult.IsSuccess)
-                    {
-                        RefreshCollectionFromServer(collection);
-                        SendMessage("Order modification was successful");
+                        if (operationResult.IsSuccess)
+                        {
+                            RefreshCollectionFromServer(collection);
+                            SendMessage("Order modification was successful");
+                        }
+                        else
+                        {
+                            SendMessage(operationResult.Messages.ToArray());
+                        }
                     }
                     else
                     {
-                        SendMessage(operationResult.Messages.ToArray());
+                        SendMessage("Order modification has been cancelled");
+                        operationFinished = true;
                     }
-                }
-                else
-                {
-                    SendMessage("Order modification has been cancelled");
-                    operationFinished = true;
-                }
-            } while (!operationFinished);
+                } while (!operationFinished);
+            }
+            
         }
 
         public void ViewOrder(OrderModel order)

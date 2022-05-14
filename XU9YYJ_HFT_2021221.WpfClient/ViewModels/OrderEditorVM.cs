@@ -89,8 +89,7 @@ namespace XU9YYJ_HFT_2021221.WpfClient.ViewModels
                 CurrentOrder.Quantity = 2;
                 CurrentOrder.Currency = "HUF";
                 CurrentOrder.SupplierName = "SKF";
-                CurrentOrder.UnitPrice = 123;
-                //minden megvan???
+                
             }
             else
             {
